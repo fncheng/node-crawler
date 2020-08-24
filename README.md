@@ -71,6 +71,8 @@ Thanks to [Authuir](https://github.com/authuir), we have a [Chinese](http://node
   * [Alternative: Docker](#alternative-docker)
 - [Rough todolist](#rough-todolist)
 
+# [中文文档](https://node-crawler.readthedocs.io/zh_CN/latest/reference/main/)
+
 # Get started
 
 ## Install
@@ -301,7 +303,7 @@ var c = new Crawler({});
 c.setLimiterProperty('limiterName', 'propertyName', value)
 ```
 
- 
+
 ## Class:Crawler
 
 ### Event: 'schedule'
@@ -366,13 +368,13 @@ items in the queue() calls if you want them to be specific to that item (overwri
 This options list is a strict superset of [mikeal's request options](https://github.com/mikeal/request#requestoptions-callback) and will be directly passed to
 the request() method.
 
-### Basic request options
+### Basic request options基本请求参数
 
  * `options.uri`: [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type) The url you want to crawl.
  * `options.timeout` : [Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type) In milliseconds (Default 15000).
  * [All mikeal's request options are accepted](https://github.com/mikeal/request#requestoptions-callback).
 
-### Callbacks
+### Callbacks回调函数
 
  * `callback(error, res, done)`: Function that will be called after a request was completed
      * `error`: [Error](https://nodejs.org/api/errors.html)
@@ -404,10 +406,15 @@ the request() method.
 
  * `options.jQuery`: [Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Boolean_type)|[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type)|[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object) Use `cheerio` with default configurations to inject document if true or "cheerio". Or use customized `cheerio` if an object with [Parser options](https://github.com/fb55/htmlparser2/wiki/Parser-options). Disable injecting jQuery selector if false. If you have memory leak issue in your project, use "whacko", an alternative parser,to avoid that. (Default true)
 
-### Charset encoding
+### Charset encoding编码设置
 
  * `options.forceUTF8`: [Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Boolean_type) If true crawler will get charset from HTTP headers or meta tag in html and convert it to UTF8 if necessary. Never worry about encoding anymore! (Default true),
+
+   此值为 true 时，crawler 将会从HTTP头部或者meta标签提取字符编码，并将其强制转换为 UTF8格式。 再也不用为不同编码的问题操心了！ (默认为 true),
+
  * `options.incomingEncoding`: [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type) With forceUTF8: true to set encoding manually (Default null) so that crawler will not have to detect charset by itself. For example, `incomingEncoding : 'windows-1255'`. See [all supported encodings](https://github.com/ashtuchkin/iconv-lite/wiki/Supported-Encodings)
+
+   一般和forceUTF8一起使用，设定此值将可以手动指定待转换的字符编码（默认为 null）。可以像这么使用： `incomingEncoding : 'windows-1255'`。这里是支持的[所有编码](https://github.com/ashtuchkin/iconv-lite/wiki/Supported-Encodings)
 
 ### Cache
 

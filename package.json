@@ -21,6 +21,7 @@
   "dependencies": {
     "bottleneckp": "~1.1.3",
     "cheerio": "^0.22.0",
+    "crawler": "^1.2.2",
     "iconv-lite": "^0.4.8",
     "lodash": "^4.17.10",
     "request": "~2.88.0",
