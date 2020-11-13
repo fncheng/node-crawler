@@ -49,7 +49,14 @@ c.queue([
         var $ = res.$
         // console.log('Grabbed', res.body.length, 'bytes')
         // console.log(res.statusCode)
-        console.log(res.body)
+        console.log(
+          $('#threadlist #threadlisttableid')
+            .children()
+            .children()
+            .children('th')
+            .children('a')
+            .text()
+        )
       }
       done()
     }
