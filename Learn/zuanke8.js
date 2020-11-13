@@ -37,8 +37,7 @@ c.queue([
     headers: {
       'User-Agent':
         'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.183 Safari/537.36',
-      Cookie:
-        '_uab_collina=160053114423154942782055; ki1e_2132_connect_is_bind=1; ki1e_2132_nofavfid=1; ki1e_2132_saltkey=s45aa225; ki1e_2132_lastvisit=1603682380; ki1e_2132_auth=c0589Db2nGdEam2JhVL3L1ljbAOEbD1K2ofsbc10Mze%2BZtZ9htOhpX%2Bs1pzBcsdks6WlxMLLiKJqSs89QlJwgYL5Rdg; ki1e_2132_lip=140.207.23.104%2C1603685990; ki1e_2132_atarget=1; ki1e_2132_home_diymode=1; ki1e_2132_clearUserdata=forum; ki1e_2132_creditnotice=0D0D0D0D0D0D0D0D0D884724; ki1e_2132_connect_not_sync_t=1; ki1e_2132_smile=8D1; timestamp=1604483869000; sign=D039E719A9E3FAF8BE667C33B576B52E; ki1e_2132_creditrule=%E5%8F%91%E8%A1%A8%E5%9B%9E%E5%A4%8D; ki1e_2132_creditbase=0D963D0D0D0D0D0D0D0; ki1e_2132_pc_size_c=0; ki1e_2132_viewid=tid_7625791; ki1e_2132_forum_lastvisit=D_11_1604369441D_15_1605259690; ki1e_2132_ulastactivity=1605259690%7C0; ki1e_2132_lastcheckfeed=884724%7C1605259690; ki1e_2132_lastact=1605259691%09home.php%09spacecp'
+      Cookie: ''
     },
     // The global callback won't be called
     // 全局回调不会被调用
