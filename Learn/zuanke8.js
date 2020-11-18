@@ -19,45 +19,58 @@ var c = new Crawler({
   }
 })
 
-// Queue just one URL, with default callback
-// c.queue('http://www.baidu.com')
-// 将一个URL加入请求队列，并使用默认回调函数
+var reg = //
+  // Queue just one URL, with default callback
+  // c.queue('http://www.baidu.com')
+  // 将一个URL加入请求队列，并使用默认回调函数
 
-// Queue a list of URLs
-// 将多个URL加入请求队列
-// c.queue(['http://www.baidu.com/', 'http://www.yahoo.com'])
+  // Queue a list of URLs
+  // 将多个URL加入请求队列
+  // c.queue(['http://www.baidu.com/', 'http://www.yahoo.com'])
 
-// Queue URLs with custom callbacks & parameters
-// 对单个URL使用特定的处理参数并指定单独的回调函数
-c.queue([
-  {
-    uri:
-      'http://www.zuanke8.com/forum.php?mod=forumdisplay&fid=15&filter=author&orderby=dateline',
-    jQuery: true,
-    headers: {
-      'User-Agent':
-        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.183 Safari/537.36',
-      Cookie: ''
-    },
-    // The global callback won't be called
-    // 全局回调不会被调用
-    callback: function (error, res, done) {
-      if (error) {
-        console.log(error)
-      } else {
-        var $ = res.$
-        // console.log('Grabbed', res.body.length, 'bytes')
-        // console.log(res.statusCode)
-        console.log(
+  // Queue URLs with custom callbacks & parameters
+  // 对单个URL使用特定的处理参数并指定单独的回调函数
+  c.queue([
+    {
+      uri:
+        'http://www.zuanke8.com/forum.php?mod=forumdisplay&fid=15&filter=author&orderby=dateline',
+      jQuery: true,
+      headers: {
+        'User-Agent':
+          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.183 Safari/537.36',
+        Cookie:
+          'ki1e_2132_saltkey=Vb991SJy; ki1e_2132_lastvisit=1605257340; _uab_collina=160526094109000892844782; ki1e_2132_connect_is_bind=1; ki1e_2132_atarget=1; ki1e_2132_smile=1D1; ki1e_2132_auth=542flNTdKG080MzXqja1M9y43Xw9yP2ZO6TK%2Bo9A3uDIk1dsxmkYfSbKwt%2BNEAJEVHbnm2pczY9BN74QZ3jZ9xdX4yc; ki1e_2132_lip=112.65.61.22%2C1605664690; ki1e_2132_ulastactivity=1605668783%7C0; ki1e_2132_clearUserdata=forum; ki1e_2132_creditnotice=0D0D0D0D0D0D0D0D0D884724; ki1e_2132_creditbase=0D964D0D0D0D0D0D0D0; ki1e_2132_creditrule=%E5%8F%91%E8%A1%A8%E5%9B%9E%E5%A4%8D; ki1e_2132_connect_not_sync_t=1; ki1e_2132_connect_not_sync_feed=1; ki1e_2132_viewid=tid_7638478; ki1e_2132_forum_lastvisit=D_15_1605669450; ki1e_2132_lastcheckfeed=884724%7C1605669450; ki1e_2132_lastact=1605669450%09connect.php%09check'
+      },
+      // The global callback won't be called
+      // 全局回调不会被调用
+      callback: function (error, res, done) {
+        if (error) {
+          console.log(error)
+        } else {
+          var $ = res.$
+          // console.log('Grabbed', res.body.length, 'bytes')
+          // console.log(res.statusCode)
+          // console.log(res)
+          // console.log(
+          //   $('#threadlist #threadlisttableid')
+          //     .children() // tbody
+          //     .children() // tr
+          //     .children('th')
+          //     .children('a')
+          //     .text()
+          // )
+
           $('#threadlist #threadlisttableid')
-            .children()
-            .children()
+            .children() // tbody
+            .children() // tr
             .children('th')
             .children('a')
-            .text()
-        )
+            .each((index, item) => {
+              console.log($(item).text())
+            })
+          // 如果使用console.log(item.innerText)会输出undefined ，此问题是箭头函数的this指向问题所导致，相关链接：https://stackoverflow.com/questions/46870941/cheerio-returns-undefined-when-calling-each-on-elements
+        }
+        done()
       }
-      done()
     }
-  }
-])
+  ])
