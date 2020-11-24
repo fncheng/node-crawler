@@ -19,6 +19,7 @@
     "node": ">=4.0.0"
   },
   "dependencies": {
+    "axios": "^0.21.0",
     "bottleneckp": "~1.1.3",
     "cheerio": "^0.22.0",
     "crawler": "^1.2.2",
