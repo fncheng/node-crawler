@@ -1,4 +1,5 @@
 var Crawler = require('crawler')
+var axios = require('axios')
 
 var c = new Crawler({
   maxConnections: 10,
@@ -19,17 +20,26 @@ var c = new Crawler({
   }
 })
 
-var reg = //
-  // Queue just one URL, with default callback
-  // c.queue('http://www.baidu.com')
-  // 将一个URL加入请求队列，并使用默认回调函数
+const keywords = ['速度', '大水']
+let matchStr = ''
+keywords.forEach((item) => {
+  matchStr += `${item}|`
+})
 
-  // Queue a list of URLs
-  // 将多个URL加入请求队列
-  // c.queue(['http://www.baidu.com/', 'http://www.yahoo.com'])
+var reg = new RegExp(`${matchStr}`, 'g')
 
-  // Queue URLs with custom callbacks & parameters
-  // 对单个URL使用特定的处理参数并指定单独的回调函数
+// Queue just one URL, with default callback
+// c.queue('http://www.baidu.com')
+// 将一个URL加入请求队列，并使用默认回调函数
+
+// Queue a list of URLs
+// 将多个URL加入请求队列
+// c.queue(['http://www.baidu.com/', 'http://www.yahoo.com'])
+
+// Queue URLs with custom callbacks & parameters
+// 对单个URL使用特定的处理参数并指定单独的回调函数
+function getRequest() {
+  let list = []
   c.queue([
     {
       uri:
@@ -66,11 +76,47 @@ var reg = //
             .children('th')
             .children('a')
             .each((index, item) => {
-              console.log($(item).text())
+              list.push($(item).text())
+              // console.log($(item).text())
             })
           // 如果使用console.log(item.innerText)会输出undefined ，此问题是箭头函数的this指向问题所导致，相关链接：https://stackoverflow.com/questions/46870941/cheerio-returns-undefined-when-calling-each-on-elements
         }
+        // console.log(list)
+        list.forEach((v, i) => {
+          let flag = reg.test(v)
+          if (flag) {
+            // 匹配到关键字，调用WxPusher
+            // https://wxpusher.zjiecode.com/docs/#/?id=%e5%8f%91%e9%80%81%e6%b6%88%e6%81%af-1
+            axios
+              .post('http://wxpusher.zjiecode.com/api/send/message', {
+                appToken: 'AT_NelycJRWAxo3EF5DKykgNwA4jAY6Cm5p',
+                content: v,
+                // summary: v, //消息摘要，显示在微信聊天页面或者模版消息卡片上，限制长度100，可以不传，不传默认截取content前面的内容。
+                contentType: 1, //内容类型 1表示文字  2表示html(只发送body标签内部的数据即可，不包括body标签) 3表示markdown
+                // topicIds: [
+                //   //发送目标的topicId，是一个数组！！！，也就是群发，使用uids单发的时候， 可以不传。
+                // ],
+                uids: [
+                  //发送目标的UID，是一个数组。注意uids和topicIds可以同时填写，也可以只填写一个。
+                  'UID_2UELgrdHiVR1Eq0cpKdG2th1pyAd'
+                ]
+                // url: 'http://wxpusher.zjiecode.com' //原文链接，可选参数
+              })
+              .then((res) => {
+                if (res.code === 1000) {
+                  console.log('发送成功')
+                }
+              })
+              .catch((err) => {
+                console.error(err)
+              })
+          }
+          // else console.log('匹配失败')
+        })
         done()
       }
     }
   ])
+}
+
+setInterval(getRequest, 5 * 60000) // 5min 执行一次
