@@ -24,6 +24,7 @@ const keywords = [
   '速度',
   '大水',
   '大毛',
+  '红包',
   '饭票',
   '汉堡王',
   '肯德基',
@@ -50,8 +51,14 @@ var reg = new RegExp(`${matchStr}`, 'g')
 
 // Queue URLs with custom callbacks & parameters
 // 对单个URL使用特定的处理参数并指定单独的回调函数
+var list = [
+  {
+    title: '027家乐福抢到了需要带sfz就行了吧抢购拥挤两次提交订单拥挤1次',
+    isChecked: false,
+  },
+]
 function getRequest() {
-  let list = []
+  // let list = []
   c.queue([
     {
       uri:
@@ -81,50 +88,70 @@ function getRequest() {
           //     .children('a')
           //     .text()
           // )
-
+          list = list.slice(-4)
           $('#threadlist #threadlisttableid')
             .children() // tbody
             .children() // tr
             .children('th')
             .children('a')
             .each((index, item) => {
-              list.push($(item).text())
-              // console.log($(item).text())
+              // 只添加前5条消息
+              if (index > 4) {
+                return
+              }
+              // if list 已存在对应标题，则不添加
+              else {
+                for (const v of list) {
+                  // 已存在相同title，不添加，不存在就添加
+                  if (v.title !== $(item).text()) {
+                    list.push({ title: $(item).text(), isChecked: false })
+                    break
+                  }
+                }
+              }
             })
           // 如果使用console.log(item.innerText)会输出undefined ，此问题是箭头函数的this指向问题所导致，相关链接：https://stackoverflow.com/questions/46870941/cheerio-returns-undefined-when-calling-each-on-elements
         }
-        // console.log(list)
-        list.forEach((v, i) => {
-          let flag = reg.test(v)
-          if (flag) {
-            // 匹配到关键字，调用WxPusher
-            // https://wxpusher.zjiecode.com/docs/#/?id=%e5%8f%91%e9%80%81%e6%b6%88%e6%81%af-1
-            axios
-              .post('http://wxpusher.zjiecode.com/api/send/message', {
-                appToken: 'AT_NelycJRWAxo3EF5DKykgNwA4jAY6Cm5p',
-                content: v,
-                // summary: v, //消息摘要，显示在微信聊天页面或者模版消息卡片上，限制长度100，可以不传，不传默认截取content前面的内容。
-                contentType: 1, //内容类型 1表示文字  2表示html(只发送body标签内部的数据即可，不包括body标签) 3表示markdown
-                // topicIds: [
-                //   //发送目标的topicId，是一个数组！！！，也就是群发，使用uids单发的时候， 可以不传。
-                // ],
-                uids: [
-                  //发送目标的UID，是一个数组。注意uids和topicIds可以同时填写，也可以只填写一个。
-                  'UID_2UELgrdHiVR1Eq0cpKdG2th1pyAd',
-                ],
-                // url: 'http://wxpusher.zjiecode.com' //原文链接，可选参数
-              })
-              .then((res) => {
-                if (res.code === 1000) {
-                  console.log('发送成功')
-                }
-              })
-              .catch((err) => {
-                console.error(err)
-              })
+        console.log(list)
+        for (const v of list) {
+          if (v.isChecked === true) {
+            continue
+          } else {
+            // isChecked === false 未读过的标题
+            // 只匹配未读的内容，即 isChecked === false的情况
+            // 匹配完将 isChecked=true
+            v.isChecked = true
+            let flag = reg.test(v.title)
+            if (flag) {
+              // 匹配到关键字，调用WxPusher
+              // https://wxpusher.zjiecode.com/docs/#/?id=%e5%8f%91%e9%80%81%e6%b6%88%e6%81%af-1
+              axios
+                .post('http://wxpusher.zjiecode.com/api/send/message', {
+                  appToken: 'AT_NelycJRWAxo3EF5DKykgNwA4jAY6Cm5p',
+                  content: v.title,
+                  // summary: v, //消息摘要，显示在微信聊天页面或者模版消息卡片上，限制长度100，可以不传，不传默认截取content前面的内容。
+                  contentType: 1, //内容类型 1表示文字  2表示html(只发送body标签内部的数据即可，不包括body标签) 3表示markdown
+                  // topicIds: [
+                  //   //发送目标的topicId，是一个数组！！！，也就是群发，使用uids单发的时候， 可以不传。
+                  // ],
+                  uids: [
+                    //发送目标的UID，是一个数组。注意uids和topicIds可以同时填写，也可以只填写一个。
+                    'UID_2UELgrdHiVR1Eq0cpKdG2th1pyAd',
+                  ],
+                  // url: 'http://wxpusher.zjiecode.com' //原文链接，可选参数
+                })
+                .then((res) => {
+                  if (res.code === 1000) {
+                    console.log('发送成功')
+                  }
+                })
+                .catch((err) => {
+                  console.error(err)
+                })
+            }
           }
           // else console.log('匹配失败')
-        })
+        }
         done()
       },
     },
@@ -134,4 +161,4 @@ let interval
 // 立即执行一次
 getRequest()
 clearInterval(interval)
-interval = setInterval(getRequest, 5 * 60000) // 5min 执行一次
+interval = setInterval(getRequest, 2 * 60000) // 5min 执行一次
