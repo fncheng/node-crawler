@@ -1,5 +1,7 @@
 var Crawler = require('crawler')
 var axios = require('axios')
+const fs = require('fs')
+const path = require('path')
 
 var c = new Crawler({
   maxConnections: 10,
@@ -19,18 +21,11 @@ var c = new Crawler({
     done()
   },
 })
-
-const keywords = [
-  '速度',
-  '大水',
-  '大毛',
-  '红包',
-  '饭票',
-  '汉堡王',
-  '肯德基',
-  '麦当劳',
-  '美团',
-]
+// 从配置文件获取关键词
+const keywords = fs
+  .readFileSync(path.resolve(__dirname, './keywords.txt'), 'utf8')
+  .replace(/\s|'/g, '')
+  .split(',')
 let matchStr = ''
 keywords.forEach((value, index) => {
   if (index === keywords.length - 1) {
